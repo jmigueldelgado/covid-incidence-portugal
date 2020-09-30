@@ -3,11 +3,17 @@ library(readr)
 library(tidyr)
 library(curl)
 library(lubridate)
+
+
+
 data_url='https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv'
 curl_download(data_url,destfile='./data.csv')
 
+pop_url='https://raw.githubusercontent.com/jmigueldelgado/covid-incidence-portugal/master/pop2019.csv'
+curl_download(pop_url,destfile='./pop2019.csv')
+
 raw=read_csv('./data.csv')
-names(raw)
+pop=read_csv('./pop2019.csv',col_names=FALSE)
 
 df=raw %>% dplyr::select(`data`,
     confirmados,
@@ -33,7 +39,6 @@ colnames(df) = c('data',
 
 
 dflong = pivot_longer(df,!data,names_to='região',values_to='confirmados')
-pop=read_csv('./pop2019.csv',col_names=FALSE)
 pop=pop %>%
   rename(`região`=X1,`população`=X2) %>%
   mutate(`região`=as.factor(`região`)) %>%
