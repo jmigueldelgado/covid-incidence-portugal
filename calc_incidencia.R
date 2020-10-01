@@ -55,10 +55,26 @@ covid=dflong %>%
   dplyr::select(-`max`,-`min`) %>%
   mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`)
 
+covid_last_month=dflong %>%
+  left_join(pop) %>%
+  group_by(`região`) %>%
+  # arrange(asc(`Data`),.by_group=TRUE) %>%
+  mutate(`max`=slider::slide_dbl(`confirmados`,max,.before=6,.complete=TRUE)) %>%
+  mutate(`min`=slider::slide_dbl(`confirmados`,min,.before=6,.complete=TRUE)) %>%
+  mutate(`acumulado 7 dias`=`max`-`min`) %>%
+  dplyr::select(-`max`,-`min`) %>%
+  mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`) %>%
+  filter(`data`>today()-30)
+
+
 library(ggplot2)
 inc=ggplot(covid) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   facet_wrap(~`região`)
+ggsave(file='./incidencia.png',plot=inc)
 
+inc_last_month=ggplot(covid_last_month) +
+  geom_line(aes(x=`data`,y=`incidência 7 dias`))+
+  facet_wrap(~`região`)
 
-ggsave(file='./incidencia.png')
+ggsave(file='./incidencia_ultimos_30_dias.png',plot=inc_last_month)
