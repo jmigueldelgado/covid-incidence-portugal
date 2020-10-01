@@ -5,10 +5,10 @@ A incidência por 100000 habitantes em 7 dias é o valor de referência para dec
 
 ## Últimos 30 dias
 
-![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia_.png?raw=true)
+![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia_ultimos_30_dias.png?raw=true)
 
 ## Desde o início da pandemia
 
-![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia_ultimos_30_dias.png?raw=true)
+![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia.png?raw=true)
 
 Fonte: https://github.com/dssg-pt/covid19pt-data/
