@@ -1,7 +1,8 @@
 # Contexto
 A incidência por 100000 habitantes em 7 dias é o valor de referência para decretar regiões de risco pelas autoridades de saúde alemãs (valor charneira é 50, ie LVT já é região de risco). Gráficos atualizados diariamente. Para ajudar quem quer viajar para a Alemanha ou vir passar férias a Portugal.
 
-# Incidência por 100000 habitantes em 7 dias (atualizado a 5-10-2020)
+Dados mais recentes de 2020-10-02.
+
 # Incidência por 100000 habitantes em 7 dias (atualizado a 2020-10-05)
 ## Últimos 30 dias
 

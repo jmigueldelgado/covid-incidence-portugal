@@ -55,7 +55,7 @@ covid=dflong %>%
   dplyr::select(-`max`,-`min`) %>%
   mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`)
 
-covid_this_week=dflong %>%
+covid_this_month=dflong %>%
   left_join(pop) %>%
   group_by(`região`) %>%
   # arrange(asc(`Data`),.by_group=TRUE) %>%
@@ -64,7 +64,7 @@ covid_this_week=dflong %>%
   mutate(`acumulado 7 dias`=`max`-`min`) %>%
   dplyr::select(-`max`,-`min`) %>%
   mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`) %>%
-  filter(`data`>today()-7)
+  filter(`data`>today()-30)
 
 
 library(ggplot2)
@@ -74,14 +74,14 @@ inc=ggplot(covid) +
   facet_wrap(~`região`)
 ggsave(file='./incidencia.png',plot=inc)
 
-inc_this_week=ggplot(covid_this_week) +
+inc_this_month=ggplot(covid_this_month) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
   facet_wrap(~`região`)
 
-ggsave(file='./incidencia_ultimos_7_dias.png',plot=inc_this_week)
+ggsave(file='./incidencia_ultimos_30_dias.png',plot=inc_this_month)
 
 
 latin = readLines("README.md",-1)
-latin[5]=paste0("# Incidência por 100000 habitantes em 7 dias (atualizado a ",lubridate::today(),")")
+latin[4]=paste0("Dados mais recentes de ",tail(covid_this_month,1) %>% pull(data),".")
 writeLines(latin,"README.md")
