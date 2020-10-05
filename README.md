@@ -6,7 +6,7 @@ Dados mais recentes de 2020-10-02.
 # Incidência por 100000 habitantes em 7 dias
 ## Últimos 30 dias
 
-![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia_ultimos_7_dias.png?raw=true)
+![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia_ultimos_30_dias.png?raw=true)
 
 ## Desde o início da pandemia
 
