@@ -4,7 +4,9 @@ library(tidyr)
 library(curl)
 library(lubridate)
 
-
+old.loc <- Sys.getlocale("LC_ALL")
+Sys.setlocale("LC_ALL","pt_PT.UTF-8")
+# Sys.setlocale("LC_TIME", "Portugues")
 
 data_url='https://raw.githubusercontent.com/dssg-pt/covid19pt-data/master/data.csv'
 curl_download(data_url,destfile='./data.csv')
@@ -71,12 +73,14 @@ library(ggplot2)
 inc=ggplot(covid) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
+  xlab("")+
   facet_wrap(~`região`)
 ggsave(file='./incidencia.png',plot=inc)
 
 inc_this_month=ggplot(covid_this_month) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
+  xlab("") +
   facet_wrap(~`região`)
 
 ggsave(file='./incidencia_ultimos_30_dias.png',plot=inc_this_month)
