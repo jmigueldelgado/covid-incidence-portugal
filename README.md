@@ -12,4 +12,8 @@ Dados mais recentes de 2021-01-25.
 
 ![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/incidencia.png?raw=true)
 
+## Casos nos 15 dias passados
+
+![alt text](https://github.com/jmigueldelgado/covid-incidence-portugal/blob/master/casos_duas_semanas.png?raw=true)
+
 Fonte: https://github.com/dssg-pt/covid19pt-data/

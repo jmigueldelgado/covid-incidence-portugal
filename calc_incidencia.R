@@ -69,6 +69,17 @@ covid_this_month=dflong %>%
   filter(`data`>today()-30)
 
 
+covid_this_week=dflong %>%
+  group_by(`região`) %>%
+  # arrange(asc(`Data`),.by_group=TRUE) %>%
+  mutate(`max`=slider::slide_dbl(`confirmados`,max,.before=1,.complete=TRUE)) %>%
+  mutate(`min`=slider::slide_dbl(`confirmados`,min,.before=1,.complete=TRUE)) %>%
+  mutate(`aumento diário`=`max`-`min`) %>%
+  dplyr::select(-`max`,-`min`) %>%
+  filter(`data`>today()-14) %>%
+  mutate(`data`=as.POSIXct(`data`))
+
+
 library(ggplot2)
 inc=ggplot(covid) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
@@ -82,8 +93,16 @@ inc_this_month=ggplot(covid_this_month) +
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
   xlab("") +
   facet_wrap(~`região`)
-
 ggsave(file='./incidencia_ultimos_30_dias.png',plot=inc_this_month)
+
+
+cases_this_week =  ggplot(covid_this_week) +
+  geom_bar(stat='identity',aes(x=`data`,y=`aumento diário`)) +
+  scale_x_datetime(date_labels = "%a", date_breaks='2 day') +
+  facet_wrap(~`região`)
+ggsave(file='./casos_duas_semanas.png',plot=cases_this_week)
+
+
 
 
 latin = readLines("README.md",-1)
