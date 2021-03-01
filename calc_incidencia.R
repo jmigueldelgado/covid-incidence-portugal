@@ -47,7 +47,7 @@ pop=pop %>%
   bind_rows(tibble(`região`=as.factor('Portugal'),`população`=sum(.$`população`)))
 
 
-covid=dflong %>%
+incidence=dflong %>%
   left_join(pop) %>%
   group_by(`região`) %>%
   # arrange(asc(`Data`),.by_group=TRUE) %>%
@@ -57,7 +57,7 @@ covid=dflong %>%
   dplyr::select(-`max`,-`min`) %>%
   mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`)
 
-covid_this_month=dflong %>%
+incidence_this_month=dflong %>%
   left_join(pop) %>%
   group_by(`região`) %>%
   # arrange(asc(`Data`),.by_group=TRUE) %>%
@@ -67,6 +67,17 @@ covid_this_month=dflong %>%
   dplyr::select(-`max`,-`min`) %>%
   mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`) %>%
   filter(`data`>today()-30)
+
+incidence_this_week=dflong %>%
+  left_join(pop) %>%
+  group_by(`região`) %>%
+  # arrange(asc(`Data`),.by_group=TRUE) %>%
+  mutate(`max`=slider::slide_dbl(`confirmados`,max,.before=6,.complete=TRUE)) %>%
+  mutate(`min`=slider::slide_dbl(`confirmados`,min,.before=6,.complete=TRUE)) %>%
+  mutate(`acumulado 7 dias`=`max`-`min`) %>%
+  dplyr::select(-`max`,-`min`) %>%
+  mutate(`incidência 7 dias`=`acumulado 7 dias`*100000/`população`) %>%
+  filter(`data`>today()-10)
 
 
 covid_this_week=dflong %>%
@@ -81,19 +92,27 @@ covid_this_week=dflong %>%
 
 
 library(ggplot2)
-inc=ggplot(covid) +
+
+inc=ggplot(incidence) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
   xlab("")+
   facet_wrap(~`região`)
 ggsave(file='./incidencia.png',plot=inc)
 
-inc_this_month=ggplot(covid_this_month) +
+inc_this_month=ggplot(incidence_this_month) +
   geom_line(aes(x=`data`,y=`incidência 7 dias`))+
   geom_hline(yintercept=50, linetype="dashed", color = "orange")+
   xlab("") +
   facet_wrap(~`região`)
 ggsave(file='./incidencia_ultimos_30_dias.png',plot=inc_this_month)
+
+inc_this_week=ggplot(incidence_this_week) +
+  geom_line(aes(x=`data`,y=`incidência 7 dias`))+
+  geom_hline(yintercept=50, linetype="dashed", color = "orange")+
+  xlab("") +
+  facet_wrap(~`região`)
+ggsave(file='./incidencia_ultimos_10_dias.png',plot=inc_this_week)
 
 
 cases_this_week =  ggplot(covid_this_week) +
@@ -106,5 +125,5 @@ ggsave(file='./casos_duas_semanas.png',plot=cases_this_week)
 
 
 latin = readLines("README.md",-1)
-latin[4]=paste0("Dados mais recentes de ",tail(covid_this_month,1) %>% pull(data),".")
+latin[4]=paste0("Dados mais recentes de ",tail(incidence_this_month,1) %>% pull(data),".")
 writeLines(latin,"README.md")
